@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "salt_eauth_rest_caching_ldap"
+version = "0.1.0"
+description = "Salt eauth REST API with caching LDAP groups"
+authors = ["Simon Lundström <simlu+github@su.se>"]
+license = "BSD-3-Clause"
+
+[tool.poetry.dependencies]
+python = "^3.5"
+su-logging = {version = "^0.2.1", extras = ["structured"]}
+
+[tool.poetry.dev-dependencies]
+isort = "^4.3.21"
+pylint = "^2.3.1"
+yapf = "^0.28"
+
+[tool.poetry.scripts]
+caching_ldap = 'salt_eauth_rest_caching_ldap:main'
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
