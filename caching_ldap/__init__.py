@@ -3,7 +3,10 @@
 import werkzeug
 from flask import Flask
 
+from caching_ldap.v1 import api as api_v1
+
 app = Flask(__name__)
+app.register_blueprint(api_v1)
 
 
 @app.errorhandler(werkzeug.exceptions.HTTPException)
