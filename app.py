@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+# pylint: disable=R,C
+import werkzeug
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.errorhandler(werkzeug.exceptions.HTTPException)
+def handle_http_errors(e):
+    return {"description": e.description, "code": e.code}, e.code
+
+
+@app.errorhandler(Exception)
+def handle_exceptions(e):
+    app.logger.exception(e)
+    return {"description": "Internal Server Error", "code": 500}, 500
+
+
+@app.route('/status')
+def status():
+    return {'status': 'OK'}, 200
+
+
+if __name__ == '__main__':
+    app.run()
