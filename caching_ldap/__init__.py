@@ -35,7 +35,3 @@ def handle_exceptions(e):
 @app.route('/status')
 def status():
     return {'status': 'OK'}, 200
-
-
-if __name__ == '__main__':
-    app.run()
