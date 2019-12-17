@@ -9,6 +9,14 @@ app = Flask(__name__)
 app.register_blueprint(api_v1)
 
 # TODO:
+# * configure
+#   * ldap
+#     * server/url
+#     * ldap-credentials
+#     * search_base
+#     * search_filter
+#   * salt acl config file
+#   * logging levels
 # * cron which:
 #   * finds all driftansvariga-*-groups and add them to cached_users[uid]
 # * On /login
