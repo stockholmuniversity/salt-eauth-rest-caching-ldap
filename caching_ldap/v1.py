@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # pylint: disable=R,C
-from flask import Blueprint, abort
-from flask import current_app as app
-from flask import jsonify, request
+from flask import Blueprint, abort, jsonify, request
+
+from caching_ldap import app
 
 api = Blueprint("api", __name__, url_prefix="/v1")
 

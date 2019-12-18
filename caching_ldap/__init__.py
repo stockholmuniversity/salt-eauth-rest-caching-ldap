@@ -4,9 +4,9 @@ import werkzeug
 from flask import Flask
 from flask_apscheduler import APScheduler
 
-from caching_ldap.v1 import api as api_v1
-
 app = Flask(__name__)
+# v1 imports app, so it must exist before we import v1
+from caching_ldap.v1 import api as api_v1  # isort:skip # noqa: E402
 app.register_blueprint(api_v1)
 
 scheduler = APScheduler()
