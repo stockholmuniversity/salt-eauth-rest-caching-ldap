@@ -14,6 +14,9 @@ scheduler.api_enabled = False
 scheduler.init_app(app)
 scheduler.start()
 
+# Must be after app and scheduler is initialized.
+from caching_ldap import cronjobs  # isort:skip # noqa: E402 F401
+
 app.cached_users = {}
 
 # TODO:
@@ -36,22 +39,6 @@ app.cached_users = {}
 #     * if it exists in cached_users[uid]:
 #       * add it to a returned_acl
 #   * return returned_acl
-
-
-def get_groups(*, search_base, search_filter):
-    _, _ = search_base, search_filter
-    return {
-        "frkj4220": ["driftansvariga-configurationmanagement"],
-        "simlu": ["driftansvariga-configurationmanagement"],
-    }
-
-
-@scheduler.task('cron', minute='*/5')
-def update_groups():
-    app.cached_users = get_groups(
-        search_base='ou=driftansvariga,ou=Groups,dc=it,dc=su,dc=se',
-        search_filter='cn=driftansvariga-*')
-    app.logger.info('Updated %s users from LDAP', len(app.cached_users))
 
 
 @app.errorhandler(werkzeug.exceptions.HTTPException)
