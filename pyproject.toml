@@ -20,6 +20,9 @@ isort = "^4.3.21"
 pylint = "^2.3.1"
 yapf = "^0.28"
 
+[tool.poetry.scripts]
+caching_ldap = 'wsgi:main'
+
 [build-system]
 requires = ["poetry>=0.12,<1.0"]
 build-backend = "poetry.masonry.api"
