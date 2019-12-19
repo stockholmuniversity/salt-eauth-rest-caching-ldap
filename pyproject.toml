@@ -4,6 +4,9 @@ version = "1.0.0"
 description = "Salt eauth REST API with caching LDAP groups"
 authors = ["Simon Lundström <simlu+github@su.se>"]
 license = "BSD-3-Clause"
+packages = [
+    { include = "caching_ldap" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.5"
