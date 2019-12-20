@@ -20,8 +20,15 @@ def login():
                 acls.extend(
                     caching_ldap.saltconfig.get_acl_from_group(group=group))
             app.logger.debug("Returning ACL %r for user %s", acls, username)
+            app.logger.info("Allowing user %r",
+                            username,
+                            extra={"user": username})
             return jsonify(acls), 200
         else:
+            app.logger.info(
+                "Denying user %r since they don't exist in cached_users",
+                username,
+                extra={"user": username})
             abort(401)
     else:
         abort(400)
