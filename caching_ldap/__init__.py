@@ -50,6 +50,12 @@ app.cached_users = {}
 #       * add it to a returned_acl
 #   * return returned_acl
 
+@app.before_first_request
+def before_first_request():
+    # Make sure app.cached_users is initialized when receiving the first
+    # request to the app
+    if not app.cached_users:
+        cronjobs.update_groups()
 
 @app.errorhandler(werkzeug.exceptions.HTTPException)
 def handle_http_errors(e):

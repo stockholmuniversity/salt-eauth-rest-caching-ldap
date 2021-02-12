@@ -15,7 +15,7 @@ def get_groups(*, search_base, search_filter):
 
 
 # next_run_time make sure we run this right now, not next iteration
-@scheduler.task('cron', minute='*/5', next_run_time=datetime.datetime.now())
+@scheduler.task('cron', minute='*/5')
 def update_groups():
     app.cached_users = get_groups(
         search_base='ou=driftansvariga,ou=Groups,dc=it,dc=su,dc=se',
