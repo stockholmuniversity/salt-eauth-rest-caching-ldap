@@ -12,6 +12,7 @@ packages = [
 python = "^3.5"
 su-logging = {version = "^0.2.1", extras = ["structured"]}
 flask = "^1.1"
+markupsafe = "1.1.1"
 Flask-APScheduler = "^1.11"
 pyyaml = "^5.2"
 
