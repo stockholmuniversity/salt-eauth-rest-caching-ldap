@@ -11,6 +11,7 @@ def get_groups(*, search_base, search_filter):
         "frkj4220": ["driftansvariga-configurationmanagement"],
         "simlu": ["driftansvariga-configurationmanagement"],
         "su-ci-prod": [],
+        "su-scm-prod": [],
     }
 
 
