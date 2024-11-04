@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "salt_eauth_rest_caching_ldap"
-version = "1.2.2"
+version = "1.2.3"
 description = "Salt eauth REST API with caching LDAP groups"
 authors = ["Simon Lundström <simlu+github@su.se>"]
 license = "BSD-3-Clause"
