@@ -16,6 +16,7 @@ markupsafe = "2.0.1"
 # This can be changed when we stop using Python 3.5
 Flask-APScheduler = "1.12.3"
 pyyaml = { version = "!=6.0.0,!=5.4.0,!=5.4.1" }
+six = "^1.17.0"
 
 [tool.poetry.dev-dependencies]
 isort = "^4.3.21"
