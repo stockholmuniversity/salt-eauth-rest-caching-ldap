@@ -50,7 +50,7 @@ app.cached_users = {}
 #       * add it to a returned_acl
 #   * return returned_acl
 
-@app.before_first_request
+@app.before_request
 def before_first_request():
     # Make sure app.cached_users is initialized when receiving the first
     # request to the app
