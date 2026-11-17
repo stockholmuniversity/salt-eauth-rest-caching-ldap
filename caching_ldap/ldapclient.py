@@ -19,13 +19,15 @@ class LdapClient:
         self.server = None
         self.conn = None
 
-    def connect(self, server: str) -> None:
+    def connect(self, server: str, port: int = 636) -> None:
         """Explicitly bind connection."""
         if self.conn is None or not self.conn.bound:
-            self.server = server
             logger.info("Binding LDAP connection to %s", server)
             self.server = Server(
-                server, use_ssl=True, tls=Tls(validate=ssl.CERT_REQUIRED)
+                server,
+                port=port,
+                use_ssl=True,
+                tls=Tls(validate=ssl.CERT_REQUIRED)
             )
             self.conn = Connection(self.server, auto_bind=True)
 

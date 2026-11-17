@@ -9,7 +9,10 @@ from caching_ldap.ldapclient import LdapClient
 def get_groups(*, search_base, search_filter):
     ldap_client = LdapClient()
     try:
-        ldap_client.connect(config['ldap']['server'])
+        ldap_client.connect(
+            config['ldap']['server'],
+            port=config['ldap'].getint('port', 636)
+        )
         groups = ldap_client.search_groups(search_base, search_filter)
     finally:
         ldap_client.disconnect()
