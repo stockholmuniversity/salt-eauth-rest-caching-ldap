@@ -33,3 +33,67 @@ for that user which is expanded from cached LDAP groups refreshed on an interval
    $ pip3 install .
    ```
 1. Serve `wsgi.py` with an [WGSI server](https://wsgi.readthedocs.io/en/latest/servers.html).
+
+## Configuration Files
+
+### `config.ini`
+
+This file contains the LDAP connection settings and ACL configuration. The default location is `/local/salt/conf/config.ini`, but you can override this by setting the `CONFIG_FILE` environment variable.
+
+**Required sections:**
+
+- **`[ldap]`** - LDAP server connection and search settings:
+  - `server`: LDAP server URL (e.g., `ldaps://ldap.example.com`)
+  - `search_base`: The base DN for LDAP searches (e.g., `ou=users,dc=example,dc=com`)
+  - `search_filter`: LDAP search filter to find groups (e.g., `(&(objectClass=groupOfNames)(member={username}))`)
+  - `port` (optional): LDAP port (default: 636 for LDAPS)
+
+- **`[acl]`** - ACL configuration:
+  - `acl_config`: Path to the `salt_acl.yaml` file
+
+**Example:**
+```ini
+[ldap]
+server = ldaps://ldap.example.com
+search_base = ou=users,dc=example,dc=com
+search_filter = (&(objectClass=groupOfNames)(member={username}))
+port = 636
+
+[acl]
+acl_config = /path/to/salt_acl.yaml
+```
+
+**To use a custom config file location with Apache:**
+```apache
+<Directory /path/to/app>
+    SetEnv CONFIG_FILE /etc/salt/config.ini
+</Directory>
+```
+
+### `salt_acl.yaml`
+
+This file maps LDAP groups to Salt eauth ACLs. It defines which groups have access to which Salt commands.
+
+**Format:**
+```yaml
+'ldap_group_name%':
+  - 'salt_function_or_glob'
+```
+
+The `%` suffix indicates that the name is an LDAP group. Groups are matched exactly, and the functions can use globs for pattern matching.
+
+**Example:**
+```yaml
+'driftansvariga-sukat%':
+  - '.*'  # Full access
+'developers%':
+  - 'test.ping'
+  - 'state.highstate'
+  - 'cmd.run'
+'.*':  # Default for any user
+  - 'test.ping'
+```
+
+**Location:**
+- The path to this file must be specified in `config.ini` under `[acl]` -> `acl_config`
+- It's recommended to store it in `/etc/salt/` or another secure location outside the application directory
