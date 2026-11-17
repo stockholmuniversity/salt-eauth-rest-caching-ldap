@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 # pylint: disable=R,C
-import datetime
 
+from caching_ldap.config import config
 from caching_ldap import app, scheduler
+from caching_ldap.ldapclient import LdapClient
 
 
 def get_groups(*, search_base, search_filter):
-    _, _ = search_base, search_filter
+    ldap_client = LdapClient()
+    try:
+        ldap_client.connect(config['ldap']['server'])
+        groups = ldap_client.search_groups(search_base, search_filter)
+    finally:
+        ldap_client.disconnect()
     return {
-        "frkj4220": ["driftansvariga-configurationmanagement"],
-        "simlu": ["driftansvariga-configurationmanagement"],
+        **groups,
         "su-ci-prod": [],
         "su-scm-prod": [],
     }
@@ -18,6 +23,6 @@ def get_groups(*, search_base, search_filter):
 @scheduler.task('cron', minute='*/5')
 def update_groups():
     app.cached_users = get_groups(
-        search_base='ou=driftansvariga,ou=Groups,dc=it,dc=su,dc=se',
-        search_filter='cn=driftansvariga-*')
+        search_base=config['ldap']['search_base'],
+        search_filter=config['ldap']['search_filter'])
     app.logger.info('Updated %s users from LDAP', len(app.cached_users))
