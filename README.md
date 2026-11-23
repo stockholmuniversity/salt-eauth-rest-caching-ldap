@@ -75,6 +75,8 @@ This file maps LDAP groups to Salt eauth ACLs. It defines which groups have acce
 
 The `%` suffix indicates that the name is an LDAP group. Groups are matched exactly, and the functions can use globs for pattern matching.
 
+The special key `'.*'` (without `%`) is the default ACL. It is added to the ACL of every user found in the LDAP cache, including users whose groups have no entry of their own in this file.
+
 **Example:**
 ```yaml
 'driftansvariga-configurationmanagement%':

@@ -15,10 +15,8 @@ def login():
         if username in app.cached_users:
             app.logger.debug("Got groups %r for user %s",
                              app.cached_users[username], username)
-            acls = []
-            for group in app.cached_users[username]:
-                acls.extend(
-                    caching_ldap.saltconfig.get_acl_from_group(group=group))
+            acls = caching_ldap.saltconfig.get_acl_from_groups(
+                groups=app.cached_users[username])
             app.logger.debug("Returning ACL %r for user %s", acls, username)
             app.logger.info("Allowing user %r",
                             username,

@@ -4,6 +4,9 @@ import yaml
 from caching_ldap import app
 from caching_ldap.config import config
 
+# Key in the ACL config whose ACL applies to every cached user
+DEFAULT_ACL_KEY = '.*'
+
 
 def get_acl_from_config():
     """Get access control list from configuration."""
@@ -22,6 +25,12 @@ def get_acl_from_config():
     return groups
 
 
-def get_acl_from_group(*, group):
-    groups = get_acl_from_config()
-    return groups.get(group + '%', [])
+def get_acl_from_groups(*, groups):
+    """Get the merged ACL for the groups plus the default ACL for any user."""
+    acl_config = get_acl_from_config()
+    acls = []
+    for key in [group + '%' for group in groups] + [DEFAULT_ACL_KEY]:
+        for entry in acl_config.get(key) or []:
+            if entry not in acls:
+                acls.append(entry)
+    return acls
