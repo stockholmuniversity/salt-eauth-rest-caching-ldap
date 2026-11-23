@@ -63,13 +63,6 @@ port = 636
 acl_config = /path/to/salt_acl.yaml
 ```
 
-**To use a custom config file location with Apache:**
-```apache
-<Directory /path/to/app>
-    SetEnv CONFIG_FILE /etc/salt/config.ini
-</Directory>
-```
-
 ### `salt_acl.yaml`
 
 This file maps LDAP groups to Salt eauth ACLs. It defines which groups have access to which Salt commands.
@@ -84,7 +77,7 @@ The `%` suffix indicates that the name is an LDAP group. Groups are matched exac
 
 **Example:**
 ```yaml
-'driftansvariga-sukat%':
+'driftansvariga-configurationmanagement%':
   - '.*'  # Full access
 'developers%':
   - 'test.ping'
@@ -93,7 +86,3 @@ The `%` suffix indicates that the name is an LDAP group. Groups are matched exac
 '.*':  # Default for any user
   - 'test.ping'
 ```
-
-**Location:**
-- The path to this file must be specified in `config.ini` under `[acl]` -> `acl_config`
-- It's recommended to store it in `/etc/salt/` or another secure location outside the application directory

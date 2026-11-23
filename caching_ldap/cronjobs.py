@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 # pylint: disable=R,C
 
-from caching_ldap.config import config
 from caching_ldap import app, scheduler
-from caching_ldap.ldapclient import LdapClient
+from caching_ldap.config import config
+from caching_ldap.ldapclient import search_groups
 
 
 def get_groups(*, search_base, search_filter):
-    ldap_client = LdapClient()
-    try:
-        ldap_client.connect(
-            config['ldap']['server'],
-            port=config['ldap'].getint('port', 636)
-        )
-        groups = ldap_client.search_groups(search_base, search_filter)
-    finally:
-        ldap_client.disconnect()
+    groups = search_groups(
+        config["ldap"]["server"],
+        search_base,
+        search_filter,
+        port=config["ldap"].getint("port", 636),
+    )
     return {
         **groups,
         "su-ci-prod": [],
@@ -23,9 +20,10 @@ def get_groups(*, search_base, search_filter):
     }
 
 
-@scheduler.task('cron', minute='*/5')
-def update_groups():
+@scheduler.task("cron", minute="*/5")
+def update_groups() -> None:
     app.cached_users = get_groups(
-        search_base=config['ldap']['search_base'],
-        search_filter=config['ldap']['search_filter'])
-    app.logger.info('Updated %s users from LDAP', len(app.cached_users))
+        search_base=config["ldap"]["search_base"],
+        search_filter=config["ldap"]["search_filter"],
+    )
+    app.logger.info("Updated %s users from LDAP", len(app.cached_users))
